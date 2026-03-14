@@ -1,24 +1,24 @@
 import pool from "../../config/db.js";
 
-export const getLeadership = async () => {
+export const getFooter = async () => {
   try {
-    const res = await pool.query('SELECT * FROM leadership_section WHERE id = 1');
+    const res = await pool.query('SELECT * FROM footer_section WHERE id = 1');
     return { data: res.rows[0], error: null };
   } catch (error) {
     return { data: null, error };
   }
 };
 
-export const updateLeadership = async (data) => {
+export const updateFooter = async (data) => {
   try {
     const keys = Object.keys(data).filter(k => k !== 'id');
     if (keys.length === 0) return { data: null, error: new Error('No data provided') };
     
-    const setClauses = keys.map((k, i) => `${k} = $${i + 1}`).join(', ');
+    const setClauses = keys.map((k, i) => `"${k}" = $${i + 1}`).join(', ');
     const values = keys.map(k => typeof data[k] === 'object' && data[k] !== null ? JSON.stringify(data[k]) : data[k]);
     
     const res = await pool.query(
-      `UPDATE leadership_section SET ${setClauses}, updated_at = NOW() WHERE id = 1 RETURNING *`,
+      `UPDATE footer_section SET ${setClauses}, updated_at = NOW() WHERE id = 1 RETURNING *`,
       values
     );
     return { data: res.rows[0], error: null };

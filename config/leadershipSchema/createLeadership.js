@@ -59,13 +59,7 @@ const createLeadership = async () => {
           {"name": {"en": "Director 4"}, "title": {"en": "COO"}, "imagePath": "/images/director4.jpg", "message": {"en": "Operations head"}}
         ]'
       )
-      ON CONFLICT (id) DO UPDATE SET
-        headings = EXCLUDED.headings,
-        destination1 = EXCLUDED.destination1,
-        destination2 = EXCLUDED.destination2,
-        destination3Description = EXCLUDED.destination3Description,
-        destination3 = EXCLUDED.destination3,
-        updated_at = NOW();
+      ON CONFLICT (id) DO NOTHING;
     `);
 
     console.log("✅ Leadership Section with 4 directors Ready");

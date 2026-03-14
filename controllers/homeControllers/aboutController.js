@@ -19,7 +19,7 @@ export const getAboutSection = async (req, res) => {
     console.error("Error fetching About section:", error);
     return res.status(500).json({
       success: false,
-      error: error.message || "Internal Server Error"
+      message: error.message || "Internal Server Error"
     });
   }
 };
@@ -45,7 +45,7 @@ export const updateAboutSection = async (req, res) => {
     console.error("Error updating About section:", error);
     return res.status(500).json({
       success: false,
-      error: error.message || "Internal Server Error"
+      message: error.message || "Internal Server Error"
     });
   }
 };

@@ -1,26 +1,30 @@
-import supabase from "../../config/supabaseClient.js";
+import pool from "../../config/db.js";
 
-/**
- * Get CTA Section (single row)
- */
 export const getCtaSection = async () => {
-  const { data, error } = await supabase
-    .from("home_cta_section")
-    .select("*")
-    .eq("id", 1)
-    .single();
-
-  return { data, error };
+  try {
+    const res = await pool.query('SELECT * FROM home_cta_section WHERE id = 1');
+    return { data: res.rows[0], error: null };
+  } catch (error) {
+    return { data: null, error };
+  }
 };
 
-/**
- * Update CTA Section (upsert id=1)
- * @param {Object} payload - { heading, subheading, description }
- */
 export const updateCtaSection = async (payload) => {
-  const { data, error } = await supabase
-    .from("home_cta_section")
-    .upsert([{ id: 1, ...payload }]);
-
-  return { data, error };
+  try {
+    const { heading, subheading, description, btn } = payload;
+    const res = await pool.query(
+      `UPDATE home_cta_section 
+       SET heading = $1, subheading = $2, description = $3, btn = $4, updated_at = NOW() 
+       WHERE id = 1 RETURNING *`,
+      [
+        heading ? JSON.stringify(heading) : '{"en":"","zh":"","si":""}',
+        subheading ? JSON.stringify(subheading) : '{"en":"","zh":"","si":""}',
+        description ? JSON.stringify(description) : '{"en":"","zh":"","si":""}',
+        btn ? JSON.stringify(btn) : '{"en":"","zh":"","si":""}'
+      ]
+    );
+    return { data: res.rows[0], error: null };
+  } catch (error) {
+    return { data: null, error };
+  }
 };

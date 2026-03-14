@@ -8,21 +8,37 @@ export const getSupplierSection = async (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: "Failed to fetch supplier section",
-        error: error.message
+        message: error.message
+      });
+    }
+
+    if (data) {
+      const row = data;
+      const formattedData = {
+        heading: row.suppliers_heading,
+        manager: row.suppliers_manager,
+        supplierMap: row.supplier_map,
+        reviews_heading: row.reviews_heading,
+        reviews_description: row.reviews_description,
+        reviews: row.reviews,
+        supplierForm: row.supplier_form // Ensure this matches the model field
+      };
+
+      return res.status(200).json({
+        success: true,
+        data: formattedData,
       });
     }
 
     res.status(200).json({
       success: true,
-      data
+      data: null
     });
 
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Server error",
-      error: err.message
+      message: err.message
     });
   }
 };
@@ -32,29 +48,26 @@ export const getSupplierSection = async (req, res) => {
 export const updateSupplierSection = async (req, res) => {
   try {
 
-    const {
-      suppliers_heading,
-      suppliers_manager,
-      supplier_map,
-      reviews_heading,
-      reviews_description,
-      reviews
-    } = req.body;
+    const { suppliers, reviews: reviewsData } = req.body;
 
-    const { data, error } = await updateSupplier({
-      suppliers_heading,
-      suppliers_manager,
-      supplier_map,
-      reviews_heading,
-      reviews_description,
-      reviews
-    });
+    const payload = {};
+    if (suppliers) {
+      if (suppliers.heading) payload.suppliers_heading = suppliers.heading;
+      if (suppliers.manager) payload.suppliers_manager = suppliers.manager;
+      if (suppliers.supplierMap) payload.supplier_map = suppliers.supplierMap;
+    }
+    if (reviewsData) {
+      if (reviewsData.heading) payload.reviews_heading = reviewsData.heading;
+      if (reviewsData.description) payload.reviews_description = reviewsData.description;
+      if (reviewsData.reviews) payload.reviews = reviewsData.reviews;
+    }
+
+    const { data, error } = await updateSupplier(payload);
 
     if (error) {
       return res.status(500).json({
         success: false,
-        message: "Failed to update supplier section",
-        error: error.message
+        message: error.message
       });
     }
 
@@ -67,8 +80,7 @@ export const updateSupplierSection = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Server error",
-      error: err.message
+      message: err.message
     });
   }
 };

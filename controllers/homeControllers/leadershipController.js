@@ -6,7 +6,7 @@ export const getLeadershipSection = async (req, res) => {
     const { data, error } = await getLeadership();
 
     if (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
 
        res.json({
@@ -14,7 +14,7 @@ export const getLeadershipSection = async (req, res) => {
       data
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
@@ -25,7 +25,7 @@ export const updateLeadershipSection = async (req, res) => {
     const { data, error } = await updateLeadership(req.body);
 
     if (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
 
     res.json({
@@ -34,6 +34,6 @@ export const updateLeadershipSection = async (req, res) => {
       data,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 };

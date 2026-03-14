@@ -1,17 +1,28 @@
-import supabase from "../../config/supabaseClient.js";
-
+import pool from "../../config/db.js";
 
 export const getPrivacyPolicy = async () => {
-  return await supabase
-    .from("privacy_policy_section")
-    .select("*")
-    .eq("id", 1)
-    .single();
+  try {
+    const res = await pool.query('SELECT * FROM privacy_policy_section WHERE id = 1');
+    return { data: res.rows[0], error: null };
+  } catch (error) {
+    return { data: null, error };
+  }
 };
 
-
 export const updatePrivacyPolicy = async (data) => {
-  return await supabase
-    .from("privacy_policy_section")
-    .upsert([{ id: 1, ...data }]);
+  try {
+    const keys = Object.keys(data).filter(k => k !== 'id');
+    if (keys.length === 0) return { data: null, error: new Error('No data provided') };
+    
+    const setClauses = keys.map((k, i) => `${k} = $${i + 1}`).join(', ');
+    const values = keys.map(k => typeof data[k] === 'object' && data[k] !== null ? JSON.stringify(data[k]) : data[k]);
+    
+    const res = await pool.query(
+      `UPDATE privacy_policy_section SET ${setClauses}, updated_at = NOW() WHERE id = 1 RETURNING *`,
+      values
+    );
+    return { data: res.rows[0], error: null };
+  } catch (error) {
+    return { data: null, error };
+  }
 };

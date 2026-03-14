@@ -4,6 +4,6 @@ import { getLeadershipController, updateLeadershipController } from "../../contr
 const router = express.Router();
 
 router.get("/get-leadership", getLeadershipController);
-router.post("/update-leadership", updateLeadershipController);
+router.put("/update-leadership", updateLeadershipController);
 
 export default router;

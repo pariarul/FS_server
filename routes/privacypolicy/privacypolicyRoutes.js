@@ -8,6 +8,6 @@ const router = express.Router();
 router.get("/get-privacy", fetchPrivacyPolicy);
 
 // POST to update Privacy Policy Section
-router.post("/update-privacy-policy", editPrivacyPolicy);
+router.put("/update-privacy", editPrivacyPolicy);
 
 export default router;

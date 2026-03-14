@@ -31,6 +31,14 @@ import createPrivacyPolicy from "./config/PrivacyPolicySchema/createPrivacyPolic
 import privacyplicy from "./routes/privacypolicy/privacypolicyRoutes.js";
 import createTerms from "./config/Terms/createTerms.js";
 import termRoutes from "./routes/terms/termRoutes.js";
+import suppliersform from "./routes/supplierformsRouter.js";
+import createSupplierFormTable from "./config/createSupplierFormTable.js";
+import createFooter from "./config/footerSchema/createFooter.js";
+import footerRoutes from "./routes/footerRoutes/footerRoutes.js";
+import createSeo from "./config/seoSchema/createSeo.js";
+import seoRoutes from "./routes/seoRoutes/seoRoutes.js";
+import createProductsDb from "./config/productsSchema/createProductsDb.js";
+import catalogRoutes from "./routes/productsRouter/catalogRoutes.js";
 
 dotenv.config();
 
@@ -38,7 +46,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: [
+      process.env.CLIENT_URL,
+      process.env.ADMIN_URL,
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://127.0.0.1:3000",
+      "http://127.0.0.1:3001"
+    ],
     credentials: true
   })
 );
@@ -55,7 +70,7 @@ app.use("/api", authRoutes);
 app.use("/api/home", heroRoutes);
 app.use("/api/home", aboutRoutes);
 app.use("/api/home", leadershipRoute);
-app.use("/api/home", supplierRoute); 
+app.use("/api/home", supplierRoute);
 app.use("/api/home", productsRoute);
 app.use("/api/home", ctaRoute);
 
@@ -75,8 +90,17 @@ app.use("/api/history", historyRoutes);
 app.use("/api/privacy-policy", privacyplicy);
 
 //term
-app.use("/api/terms-conditions",termRoutes);
+app.use("/api/terms-conditions", termRoutes);
 
+//
+app.use("/api/supplier-form", suppliersform);
+
+// Footer and SEO
+app.use("/api/footer", footerRoutes);
+app.use("/api/seo", seoRoutes);
+
+// Import/Export Products
+app.use("/api/products", catalogRoutes);
 
 // Test Supabase
 app.get("/", async (req, res) => {
@@ -109,14 +133,14 @@ app.get("/", async (req, res) => {
 });
 
 const startServer = async () => {
-//home
+  //home
   await createHero(); // auto create hero table
   await createAbout(); // auto create about tables
   await createLeadership(); // auto create leadership table
   await createSupplier(); // auto create supplier table
   await createProducts(); // auto create products table
   await createCta(); // auto create cta table
-//suppliers
+  //suppliers
   await createSupplierpage();
 
   //company
@@ -133,6 +157,18 @@ const startServer = async () => {
 
   //term
   await createTerms()
+
+  //superlier form
+  await createSupplierFormTable()
+
+  // Footer
+  await createFooter()
+
+  // SEO
+  await createSeo()
+
+  // Products (Import/Export)
+  await createProductsDb()
 
   const PORT = process.env.PORT || 5000;
 

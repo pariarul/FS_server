@@ -12,7 +12,7 @@ export const getLeadershipController = async (req, res) => {
     res.status(200).json({ success: true, data });
   } catch (err) {
     console.error("Error fetching leadership data:", err);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
@@ -29,6 +29,6 @@ export const updateLeadershipController = async (req, res) => {
     res.status(200).json({ success: true, data });
   } catch (err) {
     console.error("Error updating leadership data:", err);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: err.message });
   }
 };

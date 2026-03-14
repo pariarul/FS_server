@@ -1,18 +1,23 @@
-import supabase from "../../config/supabaseClient.js";
+import pool from "../../config/db.js";
 
-// Get Leadership Section
 export const getLeadership = async () => {
-  return await supabase
-    .from("home_leadership_section")
-    .select("*")
-    .eq("id", 1)
-    .single();
+  const res = await pool.query('SELECT * FROM home_leadership_section WHERE id = 1');
+  return { data: res.rows[0], error: null };
 };
 
-
-// Update Leadership Section
 export const updateLeadership = async (data) => {
-  return await supabase
-    .from("home_leadership_section")
-    .upsert([{ id: 1, ...data }]);
+  const { heading, title, description, btn, leaders } = data;
+  const res = await pool.query(
+    `UPDATE home_leadership_section 
+     SET heading = $1, title = $2, description = $3, btn = $4, leaders = $5, updated_at = NOW() 
+     WHERE id = 1 RETURNING *`,
+    [
+      heading ? JSON.stringify(heading) : '{}',
+      title ? JSON.stringify(title) : '{}',
+      description ? JSON.stringify(description) : '{}',
+      btn ? JSON.stringify(btn) : '{}',
+      leaders ? JSON.stringify(leaders) : '[]'
+    ]
+  );
+  return { data: res.rows[0], error: null };
 };

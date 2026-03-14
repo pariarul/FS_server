@@ -10,6 +10,6 @@ const router = express.Router();
 router.get("/get-suppliers-section", getSupplierSection);
 
 // Update Supplier Section
-router.post("/update-supplier-section", updateSupplierSection);
+router.put("/update-supplier-section", updateSupplierSection);
 
 export default router;

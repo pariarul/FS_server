@@ -13,8 +13,20 @@ const createSupplier = async () => {
         reviews_heading JSONB DEFAULT '{}'::jsonb,
         reviews_description JSONB DEFAULT '{}'::jsonb,
         reviews JSONB DEFAULT '[]'::jsonb,
+        supplier_form JSONB DEFAULT '{}'::jsonb,
         updated_at TIMESTAMP DEFAULT NOW()
       );
+    `);
+
+    // Ensure supplier_form column exists (for backward compatibility)
+    await pool.query(`
+      DO $$ 
+      BEGIN 
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                       WHERE table_name='supplier_section' AND column_name='supplier_form') THEN 
+          ALTER TABLE supplier_section ADD COLUMN supplier_form JSONB DEFAULT '{}'::jsonb; 
+        END IF; 
+      END $$;
     `);
 
     // Insert or update default data
@@ -26,13 +38,24 @@ const createSupplier = async () => {
         supplier_map,
         reviews_heading,
         reviews_description,
-        reviews
+        reviews,
+        supplier_form
       )
       VALUES (
         1,
         '{"en":"Our Global Suppliers","zh":"","si":""}',
-        '{}',
-        '{}',
+        '{
+          "heading": {"en": "Manager Information"},
+          "name": {"en": "John Doe"},
+          "role": {"en": "Supply Chain Director"},
+          "description": {"en": "Expert in global logistics and supplier relations."},
+          "imagePath": ""
+        }',
+        '{
+          "heading": {"en": "Our Global Presence"},
+          "description": {"en": "We source from the finest producers worldwide."},
+          "imagePath": ""
+        }',
         '{"en":"Supplier Reviews","zh":"","si":""}',
         '{"en":"Trusted partners around the world","zh":"","si":""}',
         '[
@@ -53,15 +76,40 @@ const createSupplier = async () => {
           {"id":"15","supplierCompanyName":{"en":"Green Valley Export"},"country":{"en":"Thailand"},"supplierLogoPath":"","message":{"en":"Your professionalism makes cooperation easy."}},
           {"id":"16","supplierCompanyName":{"en":"Sunrise Agro"},"country":{"en":"Thailand"},"supplierLogoPath":"","message":{"en":"Your quality products are highly appreciated."}}
 
-        ]'
+        ]',
+        '{
+          "heading": {"en": "Import / Export Lead Form"},
+          "description": {"en": "Let us know your requirements. Fill the form to get started."},
+          "formFields": {
+            "fullname": {"en": "Full Name"},
+            "companyname": {"en": "Company Name"},
+            "email": {"en": "Email"},
+            "phone": {"en": "Phone"},
+            "country": {"en": "Country", "type": "dropdown", "options": ["Sri Lanka", "China", "India"]},
+            "businessType": {
+              "en": "Business Type", 
+              "type": "dropdown", 
+              "options": {
+                "import": {"en": "I want to import / buy"},
+                "export": {"en": "I want to export / supply"}
+              }
+            },
+            "conditionalFields": {
+                "import": {
+                    "product": {"en": "What product?", "type": "dropdown", "categories": {}},
+                    "enquiry": {"en": "Enquiry Details"}
+                },
+                "export": {
+                    "product": {"en": "What product?", "type": "dropdown", "categories": {}},
+                    "enquiry": {"en": "Enquiry Details"}
+                }
+            }
+          }
+        }'
       )
-      ON CONFLICT (id)
-      DO UPDATE SET
-        suppliers_heading = EXCLUDED.suppliers_heading,
-        reviews_heading = EXCLUDED.reviews_heading,
-        reviews_description = EXCLUDED.reviews_description,
-        reviews = EXCLUDED.reviews,
-        updated_at = NOW();
+      ON CONFLICT (id) DO UPDATE SET 
+        supplier_form = EXCLUDED.supplier_form
+      WHERE supplier_section.supplier_form = '{}'::jsonb OR supplier_section.supplier_form IS NULL;
     `);
 
     console.log("Supplier Section Schema Ready");
