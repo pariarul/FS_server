@@ -7,9 +7,9 @@ import {
 const router = express.Router();
 
 // GET /home/cta-section
-router.get("/", getCtaSectionController);
+router.get("/get-cta-section", getCtaSectionController);
 
 // PUT /home/cta-section
-router.put("/", updateCtaSectionController);
+router.put("/update-cta-section", updateCtaSectionController);
 
 export default router;

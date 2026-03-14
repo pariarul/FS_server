@@ -19,8 +19,18 @@ import createProducts from "./config/homeSchema/createProducts.js";
 import productsRoute from "./routes/homeRoutes/productsRoute.js";
 import createCta from "./config/homeSchema/createCta.js";
 import ctaRoute from "./routes/homeRoutes/ctaRoute.js";
-
-
+import createSupplierpage from "./config/suppliers/createSupplier.js";
+import supplierRoutes from "./routes/supplierRouter/supplierRoutes.js";
+import createCompany from "./config/companySchema/createCompany.js";
+import companyRoutes from "./routes/companyRoutes/companyRouter.js";
+import createLeadershipPage from "./config/leadershipSchema/createLeadership.js";
+import leadershipRoutes from "./routes/leadershipRouter/leadershipRoutes.js";
+import historyRoutes from "./routes/historyRouter/historyRoutes.js";
+import createHistory from "./config/historySchema/createHistory.js";
+import createPrivacyPolicy from "./config/PrivacyPolicySchema/createPrivacyPolicy.js";
+import privacyplicy from "./routes/privacypolicy/privacypolicyRoutes.js";
+import createTerms from "./config/Terms/createTerms.js";
+import termRoutes from "./routes/terms/termRoutes.js";
 
 dotenv.config();
 
@@ -49,6 +59,23 @@ app.use("/api/home", supplierRoute);
 app.use("/api/home", productsRoute);
 app.use("/api/home", ctaRoute);
 
+//routes suplier
+app.use("/api/suppliers", supplierRoutes);
+
+//routes company
+app.use("/api/company", companyRoutes);
+
+//routes leadership
+app.use("/api/leadership", leadershipRoutes);
+
+//router history
+app.use("/api/history", historyRoutes);
+
+//router privacy policy
+app.use("/api/privacy-policy", privacyplicy);
+
+//term
+app.use("/api/terms-conditions",termRoutes);
 
 
 // Test Supabase
@@ -82,13 +109,30 @@ app.get("/", async (req, res) => {
 });
 
 const startServer = async () => {
-
+//home
   await createHero(); // auto create hero table
   await createAbout(); // auto create about tables
   await createLeadership(); // auto create leadership table
   await createSupplier(); // auto create supplier table
   await createProducts(); // auto create products table
   await createCta(); // auto create cta table
+//suppliers
+  await createSupplierpage();
+
+  //company
+  await createCompany();
+
+  //leadership
+  await createLeadershipPage();
+
+  //history
+  await createHistory();
+
+  //privacy
+  await createPrivacyPolicy()
+
+  //term
+  await createTerms()
 
   const PORT = process.env.PORT || 5000;
 
