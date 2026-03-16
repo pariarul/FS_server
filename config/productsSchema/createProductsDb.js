@@ -1,36 +1,54 @@
 import pool from "../db.js";
 
-const defaultImportData = {
-    cinnamon: {
-        category: "Cinnamon",
+export const defaultImportData = {
+    spices: {
+        category: "spices",
         items: [],
-        en: { category: "Cinnamon", assetName: "cinnamon" },
-        si: { category: "කුරුඳු", assetName: "cinnamon" },
-        zh: { category: "肉桂", assetName: "cinnamon" }
+        en: { category: "Spices", assetName: "spices" },
+        si: { category: "කුළුබඩු", assetName: "spices" },
+        zh: { category: "香料", assetName: "spices" }
     },
-    pepper: {
-        category: "Pepper",
+
+    coconutProducts: {
+        category: "coconut-products",
         items: [],
-        en: { category: "Pepper", assetName: "pepper" },
-        si: { category: "ගම්මිරිස්", assetName: "pepper" },
-        zh: { category: "胡椒", assetName: "pepper" }
+        en: { category: "Coconut Products", assetName: "coconut" },
+        si: { category: "පොල් නිෂ්පාදන", assetName: "coconut" },
+        zh: { category: "椰子制品", assetName: "coconut" }
+    },
+
+    freshProductsAndPulses: {
+        category: "fresh-products-pulses",
+        items: [],
+        en: { category: "Fresh Products and Pulses", assetName: "fresh" },
+        si: { category: "නව නිෂ්පාදන සහ පල්ස්", assetName: "fresh" },
+        zh: { category: "新鲜产品和豆类", assetName: "fresh" }
     }
 };
 
 const defaultExportData = {
-    cinnamon: {
-        category: "Cinnamon",
+    spices: {
+        category: "spices",
         items: [],
-        en: { category: "Cinnamon", assetName: "cinnamon" },
-        si: { category: "කුරුඳු", assetName: "cinnamon" },
-        zh: { category: "肉桂", assetName: "cinnamon" }
+        en: { category: "Spices", assetName: "spices" },
+        si: { category: "කුළුබඩු", assetName: "spices" },
+        zh: { category: "香料", assetName: "spices" }
     },
-    pepper: {
-        category: "Pepper",
+
+    coconutProducts: {
+        category: "coconut-products",
         items: [],
-        en: { category: "Pepper", assetName: "pepper" },
-        si: { category: "ගම්මිරිස්", assetName: "pepper" },
-        zh: { category: "胡椒", assetName: "pepper" }
+        en: { category: "Coconut Products", assetName: "coconut" },
+        si: { category: "පොල් නිෂ්පාදන", assetName: "coconut" },
+        zh: { category: "椰子制品", assetName: "coconut" }
+    },
+
+    freshProductsAndPulses: {
+        category: "fresh-products-pulses",
+        items: [],
+        en: { category: "Fresh Products and Pulses", assetName: "fresh" },
+        si: { category: "නව නිෂ්පාදන සහ පල්ස්", assetName: "fresh" },
+        zh: { category: "新鲜产品和豆类", assetName: "fresh" }
     }
 };
 
