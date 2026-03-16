@@ -46,14 +46,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-      process.env.CLIENT_URL,
-      process.env.ADMIN_URL,
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "http://127.0.0.1:3000",
-      "http://127.0.0.1:3001"
-    ],
+    origin: true,
     credentials: true
   })
 );
@@ -151,6 +144,8 @@ const startServer = async () => {
   if (!process.env.VERCEL) {
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
+      console.log("CLIENT_URL:", process.env.CLIENT_URL);
+      console.log("ADMIN_URL:", process.env.ADMIN_URL);
       console.log(`🚀 Server running on port ${PORT}`);
     });
   }
