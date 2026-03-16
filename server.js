@@ -97,10 +97,36 @@ app.use("/api/products", catalogRoutes);
 
 //server run
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Server running successfully 🚀"
-  });
+//server run
+
+app.get("/", async (req, res) => {
+  try {
+
+    const { data, error } = await supabase
+      .from("home_hero_section")
+      .select("*")
+      .limit(1);
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Server running successfully 🚀",
+      supabase: "Connected",
+      data
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
 });
 
 const startServer = async () => {
