@@ -15,12 +15,16 @@ export const getSupplierSection = async (req, res) => {
     if (data) {
       const row = data;
       const formattedData = {
-        heading: row.suppliers_heading,
-        manager: row.suppliers_manager,
-        supplierMap: row.supplier_map,
-        reviews_heading: row.reviews_heading,
-        reviews_description: row.reviews_description,
-        reviews: row.reviews,
+        suppliers: {
+          heading: row.suppliers_heading,
+          manager: row.suppliers_manager,
+          supplierMap: row.supplier_map,
+        },
+        reviews: {
+          heading: row.reviews_heading,
+          description: row.reviews_description,
+          reviews: row.reviews,
+        },
         supplierForm: row.supplier_form // Ensure this matches the model field
       };
 
