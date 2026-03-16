@@ -102,34 +102,12 @@ app.use("/api/seo", seoRoutes);
 // Import/Export Products
 app.use("/api/products", catalogRoutes);
 
-// Test Supabase
-app.get("/", async (req, res) => {
-  try {
+//server run
 
-    const { data, error } = await supabase
-      .from("test")
-      .select("*");
-
-    if (error) {
-      return res.status(500).json({
-        message: "Supabase Query Error ❌",
-        error: error.message
-      });
-    }
-
-    res.json({
-      message: "Supabase Connected Successfully ✅",
-      data: data
-    });
-
-  } catch (err) {
-
-    res.status(500).json({
-      message: "Connection Failed ❌",
-      error: err.message
-    });
-
-  }
+app.get("/", (req, res) => {
+  res.json({
+    message: "Server running successfully 🚀"
+  });
 });
 
 const startServer = async () => {
